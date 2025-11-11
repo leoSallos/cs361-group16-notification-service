@@ -1,5 +1,9 @@
 {
-  "dependencies": {
-    "express": "^5.1.0"
-  }
+    "name": "cs361-group16-notification-service",
+    "version": "1.0.0",
+    "description": "This is the notification service for sprint 2",
+    "main": "server.js",
+    "dependencies": {
+        "express": "^5.1.0"
+    }
 }
