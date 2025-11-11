@@ -1,11 +1,11 @@
 var fs = require("fs")
 var express = require("express")
 var app = express()
-const port = 8001
+const port = 8000
 
-// request not found
-app.get("*", function(req, res, next) {
-    res.status(404);
+// send webpage
+app.get("/", function(req, res, next) {
+    res.status(200).sendFile(__dirname + "/testIndex.html");
 });
 
 // start server listening
