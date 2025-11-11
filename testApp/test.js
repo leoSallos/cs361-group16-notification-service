@@ -1,18 +1,28 @@
-var fs = require("fs")
-var express = require("express")
-var app = express()
-const port = 8000
+const goodData = {
+    name: "test1",
+    date: "2025-11-11",
+    time: "15:24",
+    status: "unread",
+    class: "alert",
+};
+const badData = {
+    name: "test1",
+};
+const userID = "0000";
+const serverURL = "http://localhost:8001/";
 
-// send webpage
-app.get("/", function(req, res, next) {
-    res.status(200).sendFile(__dirname + "/testIndex.html");
-});
+function submitData(data){
+    fetch(serverURL + userID, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }).then(function(res){
+        return res.status;
+    });
+}
 
-// start server listening
-app.listen(port, function(err){
-    if (err){
-        throw err;
-    } else {
-        console.log("Server listening on port " + port);
-    }
-});
+// submit tests
+console.log("Good data submit: " + submitData(goodData));
+console.log("Bad data submit: " + submitData(badData));
