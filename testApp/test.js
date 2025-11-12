@@ -9,20 +9,26 @@ const badData = {
     name: "test1",
 };
 const userID = "0000";
-const serverURL = "http://localhost:8001/";
+const serverURL = "http://localhost:8003/";
 
-function submitData(data){
-    fetch(serverURL + userID, {
+async function submitData(data){
+    await fetch(serverURL + userID, {
         method: "POST",
-        body: JSON.stringify(data),
+        body: await JSON.stringify(data),
         headers: {
             "Content-Type": "application/json",
         }
     }).then(function(res){
-        return res.status;
+        console.log("\t" + res.status + " " + res.statusText);
     });
 }
 
 // submit tests
-console.log("Good data submit: " + submitData(goodData));
-console.log("Bad data submit: " + submitData(badData));
+async function submitTests(){
+    console.log("Good data submit:");
+    await submitData(goodData)
+    console.log("Bad data submit:");
+    await submitData(badData)
+}
+
+submitTests();
