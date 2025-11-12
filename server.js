@@ -8,7 +8,9 @@ const port = 8003
 //
 // setup environment
 //
-
+fs.mkdir(__dirname + "/data/", {recursive: true})
+    .then(() => console.log("Database setup"))
+    .catch(err => console.log("Error creating directory: " + err));
 console.log("Listening on port: " + port);
 
 // 
