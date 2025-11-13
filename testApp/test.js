@@ -28,6 +28,7 @@ async function submitData(data){
 async function submitTests(){
     console.log("Good data submit:");
     await submitData(goodData)
+
     console.log("Bad data submit:");
     await submitData(badData)
 }
@@ -37,7 +38,7 @@ async function getData(type, userID){
     await fetch(serverURL + type + "/" + userID).then(async function(res){
         console.log("\t" + res.status + " " + res.statusText);
         if (res.ok){
-            console.log(await res.json(), "\n");
+            console.log(await res.json());
         }
     });
 }
@@ -46,17 +47,59 @@ async function getData(type, userID){
 async function getTests(){
     console.log("Get unread:");
     await getData("unread", userID);
+    
     console.log("Get all:");
     await getData("all", userID);
+
+    console.log("Get no unread:");
+    await getData("unread", userID);
+
     console.log("Get bad user:");
     await getData("all", "0001");
 }
 
+// remove request
+async function removeRead(userID){
+    await fetch(serverURL + "remove/" + userID).then(async function(res){
+        console.log("\t" + res.status + " " + res.statusText);
+    });
+}
+
+// remove tests
+async function removeTests(){
+    console.log("Add 1 unread:");
+    await submitData(goodData);
+    await getData("all", userID);
+    console.log("Remove all read (1 left):");
+    await removeRead(userID);
+    await getData("all", userID);
+
+    console.log("Read and remove last:");
+    await removeRead(userID);
+
+    console.log("Remove empty:");
+    await removeRead(userID);
+
+    console.log("Bad remove user:");
+    await removeRead("0001");
+}
 
 // execute tests
 async function tests(){
+    console.log("=================");
+    console.log("Submit Tests");
+    console.log("=================\n");
     await submitTests();
+
+    console.log("\n=================");
+    console.log("Get Tests");
+    console.log("=================\n");
     await getTests();
+    
+    console.log("\n=================");
+    console.log("Remove Tests");
+    console.log("=================\n");
+    await removeTests();
 }
 
 tests()

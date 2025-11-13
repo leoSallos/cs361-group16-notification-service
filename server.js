@@ -176,7 +176,49 @@ app.post("/new/:userID", async function(req, res, next) {
 });
 
 // client removes read notifications
+app.get("/remove/:userID", async function(req, res, next){
+    console.log("Remove request recieved");
 
+    // get user information
+    const userID = req.params.userID;
+    var path = __dirname + "/data/" + userID + ".json";
+    try {
+        var userDataString = await fs.readFile(path, "utf8");
+    } catch (err) {
+        console.error("User data could not be retrieved.");
+        res.status(404).send("User data not found.");
+        return;
+    }
+
+    // parse file data
+    if (userDataString != ""){
+        var userData = JSON.parse(userDataString);
+    } else {
+        var userData = {notifications: []};
+    }
+
+    // remove read notifications
+    for (var i = 0; i < userData.notifications.length; i++){
+        if (userData.notifications[i].status = "read"){
+            userData.notifications.splice(i, 1);
+            i--;
+        }
+    }
+
+    // save notifications
+    var newUserDataString = await JSON.stringify(userData);
+    try {
+        await fs.writeFile(path, newUserDataString, "utf8");
+    } catch (err) {
+        console.error("File write failed: " + err);
+        res.status(500).send("Server error");
+        return;
+    }
+
+    // send response to user
+    console.log("Sending success");
+    res.status(200).send("All read notifications removed");
+});
 
 // start server listening
 app.listen(port, function(err){
