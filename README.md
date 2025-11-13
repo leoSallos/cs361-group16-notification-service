@@ -62,5 +62,5 @@ Get bad user: (Not Found)
 ## UML Sequence Diagram
 This is a UML sequence for the getData and removeRead functions in the `test.js`
 
-![Diagram of Notification Service](images/UML_notif_serv.png)
+![UML Sequence Diagram of functions getData and removeRead in the Notification Service](images/UML_notif_serv.png)
 
