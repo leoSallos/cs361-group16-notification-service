@@ -24,14 +24,14 @@ Clients communicate with the server using HTTP requests on `port 8003`. When the
 
 `404 Not found` -> No entry found
 
-## Recieving Data
+## Receiving Data
 The server always returns a JSON object in the following format. Each element in the notifications array is a notification object with these keys:
 - `name` -> name of the notification
 - `time` -> time of the notification
 - `status` -> "unread" or "read"
 - `class` -> type of notification ["alert", "warning", "reminder"]
 
-#### Example Recieve:
+#### Example Receive:
 Get unread: (1 Unread)
 
         200 OK
