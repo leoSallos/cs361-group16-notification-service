@@ -26,10 +26,10 @@ async function submitData(data){
 
 // submit tests
 async function submitTests(){
-    console.log("Good data submit:");
+    console.log("Good data submit: (OK)");
     await submitData(goodData)
 
-    console.log("Bad data submit:");
+    console.log("Bad data submit: (Bad Request)");
     await submitData(badData)
 }
 
@@ -45,16 +45,16 @@ async function getData(type, userID){
 
 // get tests
 async function getTests(){
-    console.log("Get unread:");
+    console.log("Get unread: (1 Unread)");
     await getData("unread", userID);
     
-    console.log("Get all:");
+    console.log("Get all: (1 Read)");
     await getData("all", userID);
 
-    console.log("Get no unread:");
+    console.log("Get no unread: (Empty)");
     await getData("unread", userID);
 
-    console.log("Get bad user:");
+    console.log("Get bad user: (Not Found)");
     await getData("all", "0001");
 }
 
@@ -69,18 +69,18 @@ async function removeRead(userID){
 async function removeTests(){
     console.log("Add 1 unread:");
     await submitData(goodData);
-    await getData("all", userID);
-    console.log("Remove all read (1 left):");
+    console.log("Remove all read: (1 Unread)");
     await removeRead(userID);
     await getData("all", userID);
 
-    console.log("Read and remove last:");
+    console.log("Remove last: (Empty)");
+    await removeRead(userID);
+    await getData("all", userID);
+
+    console.log("Remove empty: (OK)");
     await removeRead(userID);
 
-    console.log("Remove empty:");
-    await removeRead(userID);
-
-    console.log("Bad remove user:");
+    console.log("Bad remove user: (Not Found)");
     await removeRead("0001");
 }
 

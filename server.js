@@ -46,9 +46,10 @@ app.get("/all/:userID", async function(req, res, next) {
         return;
     }
 
-    // mark all notifiactions as read
-    const resUserData = userData;
+    // insert user data and mark all notifiactions as read
+    var resUserData = {notifications: []};
     for (var i = 0; i < userData.notifications.length; i++){
+        resUserData.notifications.push(Object.assign({}, userData.notifications[i]));
         userData.notifications[i].status = "read";
     }
 
@@ -94,8 +95,8 @@ app.get("/unread/:userID", async function(req, res, next) {
     var resUserData = {notifications: []};
     for (var i = 0; i < userData.notifications.length; i++){
         if (userData.notifications[i].status == "unread"){
-            resUserData.notifications.push(userData.notifications[i]);
-            userData.notifications.status = "read";
+            resUserData.notifications.push(Object.assign({}, userData.notifications[i]));
+            userData.notifications[i].status = "read";
         }
     }
 
@@ -199,7 +200,7 @@ app.get("/remove/:userID", async function(req, res, next){
 
     // remove read notifications
     for (var i = 0; i < userData.notifications.length; i++){
-        if (userData.notifications[i].status = "read"){
+        if (userData.notifications[i].status == "read"){
             userData.notifications.splice(i, 1);
             i--;
         }
