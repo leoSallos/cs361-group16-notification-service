@@ -4,7 +4,7 @@
     - in the directory run the command `npm install` to install packages.
 
 ## Requesting Data
-Clients communicate with the server using HTTP requests on port 8003. When the server starts, it will create a `./data` folder if it does not already exist.
+Clients communicate with the server using HTTP requests on `port 8003`. When the server starts, it will create a `./data` folder if it does not already exist.
 
 ### Run Server
 
