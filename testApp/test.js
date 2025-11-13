@@ -11,8 +11,9 @@ const badData = {
 const userID = "0000";
 const serverURL = "http://localhost:8003/";
 
+// submit request
 async function submitData(data){
-    await fetch(serverURL + userID, {
+    await fetch(serverURL + "new/" + userID, {
         method: "POST",
         body: await JSON.stringify(data),
         headers: {
@@ -31,4 +32,31 @@ async function submitTests(){
     await submitData(badData)
 }
 
-submitTests();
+// get request
+async function getData(type, userID){
+    await fetch(serverURL + type + "/" + userID).then(async function(res){
+        console.log("\t" + res.status + " " + res.statusText);
+        if (res.ok){
+            console.log(await res.json(), "\n");
+        }
+    });
+}
+
+// get tests
+async function getTests(){
+    console.log("Get unread:");
+    await getData("unread", userID);
+    console.log("Get all:");
+    await getData("all", userID);
+    console.log("Get bad user:");
+    await getData("all", "0001");
+}
+
+
+// execute tests
+async function tests(){
+    await submitTests();
+    await getTests();
+}
+
+tests()

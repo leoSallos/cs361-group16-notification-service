@@ -1,7 +1,7 @@
 # TODO
 
 - [x] POST from client notifications can be recieved and stored
-- [ ] Client GET request can retrieve all notifications
+- [x] Client GET request can retrieve all notifications
 - [ ] Client POST can remove read notifications
 
 # Communication Contract

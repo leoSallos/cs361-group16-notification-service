@@ -23,11 +23,100 @@ app.get("/", function(req, res, next) {
     res.status(204);
 });
 
-// client gets notifications
+// client gets all notifications
+app.get("/all/:userID", async function(req, res, next) {
+    console.log("Get all notifications request recieved");
+
+    // get user information
+    const userID = req.params.userID;
+    var path = __dirname + "/data/" + userID + ".json";
+    try {
+        var userDataString = await fs.readFile(path, "utf8");
+    } catch (err) {
+        console.error("User data could not be retrieved.");
+        res.status(404).send("User data not found.");
+        return;
+    }
+
+    // get all notifications
+    if (userDataString != ""){
+        var userData = JSON.parse(userDataString);
+    } else {
+        res.status(204).send("User has no notifications.");
+        return;
+    }
+
+    // mark all notifiactions as read
+    const resUserData = userData;
+    for (var i = 0; i < userData.notifications.length; i++){
+        userData.notifications[i].status = "read";
+    }
+
+    // save notifications
+    var newUserDataString = await JSON.stringify(userData);
+    try {
+        await fs.writeFile(path, newUserDataString, "utf8");
+    } catch (err) {
+        console.error("File write failed: " + err);
+        res.status(500).send("Server error");
+        return;
+    }
+
+    // send data to user
+    console.log("Sending success");
+    res.status(200).json(resUserData);
+});
+
+// client gets unread notifications
+app.get("/unread/:userID", async function(req, res, next) {
+    console.log("Get unread notifications request recieved");
+
+    // get user information
+    const userID = req.params.userID;
+    var path = __dirname + "/data/" + userID + ".json";
+    try {
+        var userDataString = await fs.readFile(path, "utf8");
+    } catch (err) {
+        console.error("User data could not be retrieved.");
+        res.status(404).send("User data not found.");
+        return;
+    }
+
+    // get all notifications
+    if (userDataString != ""){
+        var userData = JSON.parse(userDataString);
+    } else {
+        res.status(204).send("User has no notifications.");
+        return;
+    }
+
+    // filter read notifications and mark unread as read after loading into res
+    var resUserData = {notifications: []};
+    for (var i = 0; i < userData.notifications.length; i++){
+        if (userData.notifications[i].status == "unread"){
+            resUserData.notifications.push(userData.notifications[i]);
+            userData.notifications.status = "read";
+        }
+    }
+
+    // save notifications
+    var newUserDataString = await JSON.stringify(userData);
+    try {
+        await fs.writeFile(path, newUserDataString, "utf8");
+    } catch (err) {
+        console.error("File write failed: " + err);
+        res.status(500).send("Server error");
+        return;
+    }
+
+    // send data to user
+    console.log("Sending success");
+    res.status(200).json(resUserData);
+});
 
 
 // client posts new notification
-app.post("/:userID", async function(req, res, next) {
+app.post("/new/:userID", async function(req, res, next) {
     console.log("Add notification request recieved");
 
     // get user information
@@ -36,7 +125,7 @@ app.post("/:userID", async function(req, res, next) {
     try {
         var userDataString = await fs.readFile(path, "utf8");
     } catch (err) {
-        console.log("Data file read error: " + err);
+        console.log("User data doesn't exist, making new data file.");
         var userDataString = undefined;
     }
     if (userDataString){
@@ -49,7 +138,7 @@ app.post("/:userID", async function(req, res, next) {
     console.log(req.body);
     var data = req.body;
     if (!data.name || !data.time || !data.status || !data.class){
-        console.log("Request error");
+        console.error("Request error");
         res.status(400).send("Improper request body format.");
         return;
     }
@@ -74,16 +163,16 @@ app.post("/:userID", async function(req, res, next) {
             ],
         };
     }
-    var userDataString = await JSON.stringify(userData);
+    userDataString = await JSON.stringify(userData);
     try {
         await fs.writeFile(path, userDataString, "utf8");
     } catch (err) {
-        console.log("File write failed: " + err);
+        console.error("File write failed: " + err);
         res.status(500).send("Server error");
         return;
     }
     console.log("Sending success");
-    res.status(200).send("Notification successfully submitted.");
+    res.status(200).send({test: "Notification successfully submitted."});
 });
 
 // client removes read notifications
