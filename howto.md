@@ -10,4 +10,4 @@ Required Software:
 2. Run Server
     - run the command `npm start` to start the server
 3. Run Test Program
-    - run the command `node testApp/test.js`
+    - run the command `node testApp/test.js` while the server is running
