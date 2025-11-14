@@ -10,19 +10,35 @@ Clients communicate with the server using HTTP requests on `port 8003`. When the
 
     - run the command `npm start` to start the server.
 
-### Example Request
+## Example Request
 ##### Get unread notifications:
 `await getData("unread", userID);`
 
 ##### Get all notifications:
 `await getData("all", userID);`
 
+##### Submit a new notification:
+`await submitData({
+    name: "test1",
+    date: "2025-11-11",
+    time: "15:24",
+    status: "unread",
+    class: "alert",
+});`
+
+##### Remove all read notifications:
+`await removeRead(userID);`
+
 ##### Responses:
 `200 OK` -> Notification successfuly submitted
+
+`204 No Content` -> Notification not found
 
 `400 Bad Request` -> Invalid request
 
 `404 Not found` -> No entry found
+
+`500 Server Error` -> Failed to write file.
 
 ## Receiving Data
 The server always returns a JSON object in the following format. Each element in the notifications array is a notification object with these keys:
