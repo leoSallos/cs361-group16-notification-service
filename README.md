@@ -12,6 +12,7 @@ Clients communicate with the server using HTTP requests on `port 8003`. When the
 
 ## Example Request
 Each notification is associated with a specific user via their `userID`.
+Notifications are sent as JSON objects, and each must include the required categories.
 
 **Parameters:**
 - `userID` -> The ID of the user (varies per user).
