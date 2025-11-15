@@ -47,31 +47,32 @@ The server always returns a JSON object in the following format. Each element in
 - `status` -> "unread" or "read"
 - `class` -> type of notification ["alert", "warning", "reminder"]
 
-#### Example Receive:
-Get unread: (1 Unread)
+### Example Receive:
+<b> Get unread: (1 Unread) </b> 
 
         200 OK
         
-{
+<b> {
   notifications: [
     { name: 'test1', time: '15:24', status: 'unread', class: 'alert' }
   ]
-}
+} </b> 
 
-Get all: (1 Read)
+<b> Get all: (1 Read)  </b>
 
         200 OK
         
-{
+<b> {
   notifications: [ { name: 'test1', time: '15:24', status: 'read', class: 'alert' } ]
-}
-Get no unread: (Empty)
+} </b>
+
+<b> Get no unread: (Empty)  </b>
 
         200 OK
         
-{ notifications: [] }
+<b> { notifications: [] }  </b>
 
-Get bad user: (Not Found)
+<b> Get bad user: (Not Found)  </b>
 
         404 Not Found
 
