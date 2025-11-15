@@ -11,6 +11,13 @@ Clients communicate with the server using HTTP requests on `port 8003`. When the
     - run the command `npm start` to start the server.
 
 ## Example Request
+Each notification is associated with a specific user via their `userID`.
+
+**Parameters:**
+- `userID` -> The ID of the user (varies per user).
+- `unread` -> Fetch only unread notifications.
+- `all` -> Fetch all notifications for the user.
+
 ##### Get unread notifications:
 `await getData("unread", userID);`
 
@@ -38,7 +45,7 @@ Clients communicate with the server using HTTP requests on `port 8003`. When the
 
 `404 Not found` -> No entry found
 
-`500 Server Error` -> Failed to write file.
+`500 Server Error` -> Failed to write file
 
 ## Receiving Data
 The server always returns a JSON object in the following format. Each element in the notifications array is a notification object with these keys:
