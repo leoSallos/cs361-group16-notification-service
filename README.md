@@ -1,41 +1,56 @@
 # Communication Contract: Notification Service
-#### Install Node Packages
-
-    - in the directory run the command `npm install` to install packages.
 
 ## Requesting Data
-Clients communicate with the server using HTTP requests on `port 8003`. When the server starts, it will create a `./data` folder if it does not already exist.
+Clients communicate with the server using HTTP requests, and each notification is 
+associated with a specific user via their `userID` in the path of the requests.
+Notifications are sent as JSON objects, and each must include the required categories
+of: name, date, time, status, and class.
 
-### Run Server
-
-    - run the command `npm start` to start the server.
-
-## Example Request
-Each notification is associated with a specific user via their `userID`.
-Notifications are sent as JSON objects, and each must include the required categories.
-
-**Parameters:**
+**Request Parameters:**
 - `userID` -> The ID of the user (varies per user).
 - `unread` -> Fetch only unread notifications.
 - `all` -> Fetch all notifications for the user.
+- `remove` -> Delete all read notifications.
+
+## Example Requests
 
 ##### Get unread notifications:
-`await getData("unread", userID);`
+```
+const response = await fetch(URL + "/unread/" + userID);
+```
 
 ##### Get all notifications:
-`await getData("all", userID);`
+```
+const response = await fetch(URL + "/all/" + userID);
+```
 
 ##### Submit a new notification:
-`await submitData({
-    name: "test1",
-    date: "2025-11-11",
-    time: "15:24",
-    status: "unread",
-    class: "alert",
-});`
+```
+const response = await fetch(URL + "/add/" + userID, {
+    method: "POST",
+    body: await JSON.stringify({
+        name: <notification name>,
+        date: <notification date>,
+        time: <notification time>,
+        status: "unread",
+        class: <notification status>,
+    }),
+    headers: {"Content-Type": "application/json"}
+});
+```
 
 ##### Remove all read notifications:
-`await removeRead(userID);`
+```
+const response = await fetch(URL + "/all/" + userID);
+```
+
+## Receiving Data
+The server always returns a JSON object in the following format. Each element in the notifications array is a notification object with these keys:
+- `name` -> name of the notification
+- `date` -> date of the notification
+- `time` -> time of the notification
+- `status` -> "unread" or "read"
+- `class` -> type of notification ["alert", "warning", "reminder"]
 
 ##### Responses:
 `200 OK` -> Notification successfuly submitted
@@ -46,43 +61,19 @@ Notifications are sent as JSON objects, and each must include the required categ
 
 `404 Not found` -> No entry found
 
-`500 Server Error` -> Failed to write file
-
-## Receiving Data
-The server always returns a JSON object in the following format. Each element in the notifications array is a notification object with these keys:
-- `name` -> name of the notification
-- `time` -> time of the notification
-- `status` -> "unread" or "read"
-- `class` -> type of notification ["alert", "warning", "reminder"]
+`500 Server Error` -> Failed to write to database
 
 ### Example Receive:
-<b> Get unread: (1 Unread) </b> 
+```
+const response = await fetch(URL + "/all/" + userID);
+const resNotification = await response.json();
 
-        200 OK
-        
-<b> {
-  notifications: [
-    { name: 'test1', time: '15:24', status: 'unread', class: 'alert' }
-  ]
-} </b> 
-
-<b> Get all: (1 Read)  </b>
-
-        200 OK
-        
-<b> {
-  notifications: [ { name: 'test1', time: '15:24', status: 'read', class: 'alert' } ]
-} </b>
-
-<b> Get no unread: (Empty)  </b>
-
-        200 OK
-        
-<b> { notifications: [] }  </b>
-
-<b> Get bad user: (Not Found)  </b>
-
-        404 Not Found
+const name = resNotification.name;
+const date = resNotification.date;
+const time = resNotification.time;
+const status = resNotification.status;
+const class = resNotification.class;
+```
 
 ## UML Sequence Diagram
 ![UML Sequence Diagram: Notification Service](images/uml_sequence.png)
