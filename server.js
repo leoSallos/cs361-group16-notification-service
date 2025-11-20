@@ -13,8 +13,21 @@ fs.mkdir(__dirname + "/data/", {recursive: true})
     .catch(err => console.log("Error creating directory: " + err));
 console.log("Listening on port: " + port);
 
+//
+// Middleware
+//
+
+app.use(function (req, res, next) {
+    // allow cross-origin access control
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+
+    next();
+});
+
 // 
-// Server Actions
+// Route Service
 //
 
 // server ping
