@@ -186,7 +186,7 @@ app.post("/new/:userID", async function(req, res, next) {
         return;
     }
     console.log("Sending success");
-    res.status(200).send({test: "Notification successfully submitted."});
+    res.status(200).send("Notification successfully submitted.");
 });
 
 // client removes read notifications
