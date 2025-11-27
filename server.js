@@ -151,7 +151,7 @@ app.post("/new/:userID", async function(req, res, next) {
     // get data to import
     console.log(req.body);
     var data = req.body;
-    if (!data.name || !data.time || !data.status || !data.class){
+    if (!data.name || !data.date || !data.time || !data.status || !data.class){
         console.error("Request error");
         res.status(400).send("Improper request body format.");
         return;
@@ -161,6 +161,7 @@ app.post("/new/:userID", async function(req, res, next) {
     if (userData){
         userData.notifications.push({
             name: data.name,
+            date: data.date,
             time: data.time,
             status: data.status,
             class: data.class,
@@ -170,6 +171,7 @@ app.post("/new/:userID", async function(req, res, next) {
             notifications: [
                 {
                     name: data.name,
+                    date: data.date,
                     time: data.time,
                     status: data.status,
                     class: data.class,
